@@ -1,0 +1,187 @@
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: #121212;
+  color: #f5f5f5;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+#runtimeSetup,
+#runtimeStatus {
+  box-sizing: border-box;
+  min-height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px 28px;
+}
+
+html[data-runtime="setup"] #runtimeSetup,
+html[data-runtime="status"] #runtimeStatus {
+  display: flex;
+}
+
+.runtime-card,
+.runtime-status-card {
+  width: min(960px, 100%);
+}
+
+.runtime-kicker,
+#runtimeStatusTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8c8c8;
+}
+
+h1,
+#runtimeStatusMessage {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.15;
+  font-weight: 560;
+}
+
+#runtimeIntro,
+#runtimeStatusDetail,
+.runtime-hint {
+  margin: 18px 0 0;
+  max-width: 760px;
+  color: #cfcfcf;
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+#runtimeStatusDetail:empty,
+.runtime-hint:empty {
+  display: none;
+}
+
+#sourceUrlInput {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 28px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 2px solid #3a3a3a;
+  background: #1b1b1b;
+  color: #fff;
+  font: 28px/1.3 Consolas, "Courier New", monospace;
+}
+
+#sourceUrlInput:focus,
+.runtime-actions button:focus,
+.runtime-key:focus {
+  outline: 4px solid #fff;
+  outline-offset: 3px;
+}
+
+#sourceError {
+  min-height: 32px;
+  margin: 14px 0 0;
+  color: #ffb4b4;
+  font-size: 22px;
+}
+
+.runtime-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.runtime-actions button {
+  min-width: 280px;
+  padding: 16px 22px;
+  border-radius: 12px;
+  border: 2px solid #f0f0f0;
+  background: #f0f0f0;
+  color: #111;
+  font: 600 22px/1.2 "Segoe UI", system-ui, sans-serif;
+}
+
+.runtime-actions button.runtime-secondary {
+  background: transparent;
+  color: #f5f5f5;
+}
+
+.runtime-actions button[hidden] {
+  display: none;
+}
+
+.runtime-keyboard {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  width: min(96%, 980px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: rgba(20, 20, 20, 0.98);
+  border: 1px solid #2e2e2e;
+  border-radius: 16px;
+  transform: translateX(-50%) translateY(calc(100% + 48px));
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.runtime-keyboard-open {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.runtime-kb-row {
+  display: flex;
+  gap: 6px;
+}
+
+.runtime-key {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 14px 0;
+  border-radius: 8px;
+  border: 2px solid #333;
+  background: #1a1a1a;
+  color: #fff;
+  font: 26px/1 Consolas, "Courier New", monospace;
+}
+
+.runtime-key.wide-2 { flex-grow: 2; }
+.runtime-key.wide-3 { flex-grow: 3; }
+.runtime-key-action {
+  font: 600 16px/1.2 "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+}
+
+#externalAppFrame {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+
+html[data-runtime="external"] #externalAppFrame {
+  display: block;
+}
+
+html.tomorrowos-video-active,
+html.tomorrowos-video-active body,
+html.tomorrowos-video-active #externalAppFrame {
+  background: transparent;
+}
+
+html[data-runtime="external"] #runtimeSetup,
+html[data-runtime="external"] #runtimeStatus {
+  display: none;
+}

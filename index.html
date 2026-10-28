@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Application runtime</title>
+    <script src="./runtime-config.js"></script>
+    <script>
+      (function () {
+        var params = new URLSearchParams(location.search);
+        var forceSetup = params.get("setup") === "1";
+        var cfg = window.TOMORROWOS_RUNTIME_CONFIG || {};
+        var predefined = String(cfg.appSourceUrl || "").trim();
+        var parsed = null;
+        try {
+          parsed = JSON.parse(localStorage.getItem("tomorrowos.appSource") || "null");
+        } catch (err) {
+          parsed = null;
+        }
+        var decided = !!(parsed && parsed.decided);
+        var sourceUrl = parsed && typeof parsed.sourceUrl === "string" ? parsed.sourceUrl : "";
+        if (predefined && (cfg.lockAppSource || !decided)) {
+          sourceUrl = predefined;
+          decided = true;
+        }
+        if (forceSetup) {
+          document.documentElement.dataset.runtime = "setup";
+          return;
+        }
+        if (!decided) {
+          document.documentElement.dataset.runtime = "setup";
+          return;
+        }
+        if (!sourceUrl) {
+          location.replace("builtin/index.html");
+          return;
+        }
+        document.documentElement.dataset.runtime = "status";
+      })();
+    </script>
+    <link rel="stylesheet" href="./runtime/shell.css" />
+  </head>
+  <body>
+    <div id="runtimeSetup">
+      <section class="runtime-card">
+        <p class="runtime-kicker">Application</p>
+        <h1 id="runtimeTitle">Application source</h1>
+        <p id="runtimeIntro">
+          Choose which application this screen runs. This is separate from the CMS address, which that application configures itself.
+        </p>
+        <input
+          id="sourceUrlInput"
+          type="text"
+          readonly
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="https://example.com/demo-app"
+          aria-label="Application source URL"
+        />
+        <p id="sourceError"></p>
+        <div class="runtime-actions">
+          <button type="button" id="sourceSaveBtn">Save application source</button>
+          <button type="button" id="sourceBuiltinBtn" class="runtime-secondary">Continue with built-in application</button>
+        </div>
+        <p class="runtime-hint">Remote: Enter opens the keyboard. Down moves to the buttons. Left and right switch between them. USB keyboard types into the address.</p>
+        <div id="sourceKeyboard" class="runtime-keyboard" aria-label="On-screen keyboard"></div>
+      </section>
+    </div>
+
+    <div id="runtimeStatus" aria-live="polite">
+      <section class="runtime-status-card">
+        <p id="runtimeStatusTitle">Starting</p>
+        <p id="runtimeStatusMessage">Starting…</p>
+        <p id="runtimeStatusDetail"></p>
+        <p class="runtime-hint">Press 0000 while this screen is visible to change the application source.</p>
+      </section>
+    </div>
+
+    <iframe id="externalAppFrame" title="Application"></iframe>
+
+    <script src="./hosts/browser-platform.js"></script>
+    <script src="./hosts/browser.js"></script>
+    <script src="./runtime/version.js"></script>
+    <script src="./runtime/manifest.js"></script>
+    <script src="./runtime/state.js"></script>
+    <script src="./runtime/zip-extract.js"></script>
+    <script src="./runtime/update-manager.js"></script>
+    <script src="./runtime/pairing-session.js"></script>
+    <script src="./runtime/cms-commands.js"></script>
+    <script src="./runtime/platform-bridge.js"></script>
+    <script src="./runtime/source-setup.js"></script>
+    <script src="./runtime/bootstrap.js"></script>
+  </body>
+</html>
