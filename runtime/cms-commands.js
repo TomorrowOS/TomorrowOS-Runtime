@@ -46,13 +46,6 @@
           "device.content.clear": supported(guest.has("device.content.clear"))
         }
       };
-      if (typeof guest.names === "function") {
-        guest.names().forEach((name) => {
-          if (name.startsWith("device.") && !result.capabilities[name]) {
-            result.capabilities[name] = supported(true);
-          }
-        });
-      }
       return result;
     }
 

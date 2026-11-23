@@ -4,7 +4,7 @@
 // the loader, manifest client, or update manager.
 window.TOMORROWOS_RUNTIME_CONFIG = {
   shellName: "TomorrowOS",
-  runtimeVersion: "1.2.2",
+  runtimeVersion: "1.2.3",
   appSourceUrl: "",
   lockAppSource: false
 };

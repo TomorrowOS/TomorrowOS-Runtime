@@ -4,6 +4,7 @@
 (function (root) {
   const RT = root.TomorrowOSRuntime || (root.TomorrowOSRuntime = {});
   const STORAGE_KEY = "tomorrowos.runtime.pairing";
+  const PROTOCOL_VERSION = 1;
 
   function normalizePairingEndpoint(value) {
     const raw = typeof value === "string" ? value.trim() : "";
@@ -83,6 +84,7 @@
       const info = hostInfo();
       const uptimeSec = bootUptimeSec();
       return {
+        protocolVersion: PROTOCOL_VERSION,
         platform: info.platform || "browser",
         playerVersion: config.runtimeVersion || "",
         deviceName: info.model || "Display",

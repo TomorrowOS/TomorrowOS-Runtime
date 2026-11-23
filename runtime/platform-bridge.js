@@ -185,7 +185,6 @@
     const router = RT.createCmsCommandRouter({
       guest: {
         has: (name) => guestHandlers.has(name),
-        names: () => Array.from(guestHandlers),
         ask: (name, payload, timeoutMs) => askGuest(context, name, payload, timeoutMs)
       },
       deviceInfo() {
