@@ -10,7 +10,7 @@ Build your own CMS, digital menu board, dashboard, wayfinding application or ent
 
 > **Project status: Developer Preview**
 >
-> The Application Runtime is under active development. Application loading, manifest handling, updates and the HTML5 API are implemented in the repository, but a compatible platform host is required. APIs and packaging may change, and production compatibility must be verified for each hardware platform.
+> The Application Runtime is under active development. Application loading, manifest handling, updates and the HTML5 API are implemented in this repository. This repository does not run on its own. A platform host loads it. Current hosts are Windows 11 Pro x64, and Samsung Tizen 6.5 and 7.0. APIs and packaging may change, and production compatibility must be verified for each hardware model and firmware.
 
 [TomorrowOS](https://github.com/TomorrowOS/TomorrowOS) · [Documentation](https://docs.tomorrowos.org) · [Server SDK](https://github.com/TomorrowOS/TomorrowOS_SDK) · [Community](https://github.com/TomorrowOS/TomorrowOS/discussions)
 
@@ -124,11 +124,18 @@ TomorrowOS-Runtime/
     └── tomorrowos.js
 ```
 
-The Shell requires a compatible platform host implementing the relevant `TomorrowOSHost` interfaces.
+This repository is the shared application shell. It is not a standalone player, and opening `index.html` in a browser does not start a device.
 
-**Current limitation:** The repository is not yet a standalone installable player distribution. The checked-in Shell references host adapter files and built-in application resources that are not included in this repository. The `package.json` also does not currently define build or start scripts.
+A platform host loads this shell after installing `TomorrowOSHost`. The host also supplies device APIs and the built-in application. `package.json` does not define build or start scripts.
 
-A complete host/runtime build is required for device testing.
+**Current hosts:**
+
+| Host | Supported versions |
+|---|---|
+| Windows | Windows 11 Pro x64 |
+| Samsung Tizen | 6.5 and 7.0 |
+
+Device testing needs the matching host build together with this runtime.
 
 ---
 
@@ -734,19 +741,24 @@ See the [Widget and ZIP Package Guide](https://github.com/TomorrowOS/TomorrowOS/
 
 TomorrowOS aims to provide a common developer experience across digital signage platforms.
 
-However, the Application Runtime requires a platform-specific host integration.
+The Application Runtime runs inside a platform host. It is currently loaded by these hosts:
 
-The broader TomorrowOS project currently documents existing player support for:
+| Host | Supported versions |
+|---|---|
+| Windows | Windows 11 Pro x64 |
+| Samsung Tizen | 6.5 and 7.0 |
+
+The broader TomorrowOS project documents existing player support separately:
 
 | Platform | Existing TomorrowOS Player | Application Runtime |
 |---|---|---|
-| Samsung Tizen 6.5 / 7.0 | Supported | Host integration and validation required |
+| Samsung Tizen 6.5 and 7.0 | Supported | Supported through the Tizen host |
+| Windows 11 Pro x64 | Supported | Supported through the Windows host |
 | BrightSign Series 3–6 | Supported | Host integration and validation required |
-| Windows 11 Pro x64 | Supported | Host integration and validation required |
 | Android / NovaStar | In development | Not production certified |
 | LG webOS | Planned | Not production certified |
 
-**Existing player support does not automatically mean Application Runtime support.**
+**Existing player support does not automatically mean Application Runtime support.** BrightSign, Android, and webOS are not current Application Runtime hosts.
 
 Runtime compatibility must be validated for the specific platform, model, firmware, host build and required capabilities.
 
@@ -791,9 +803,9 @@ Security issues should be reported through the [TomorrowOS Security Policy](http
 
 The following limitations apply to the inspected developer-preview source:
 
-- A compatible platform host is required.
-- The repository does not currently provide a complete standalone player installer.
-- Host adapters and built-in application resources referenced by the Shell are not all included in this repository.
+- This repository does not run on its own. Current hosts are Windows 11 Pro x64, and Samsung Tizen 6.5 and 7.0.
+- Opening `index.html` in a browser does not provide device APIs or start an application.
+- Platform hosts and their built-in applications are separate from this repository.
 - Application Runtime APIs may change.
 - Device capabilities vary by host and firmware.
 - Third-party application security requires additional validation.
