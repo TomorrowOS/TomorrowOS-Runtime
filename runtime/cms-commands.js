@@ -9,7 +9,6 @@
   const GUEST_TIMEOUT_MS = 30000;
   const GUEST_TIMEOUTS = {
     "device.content.setPolicy": 55000,
-    "device.content.refreshMenuzenDesign": 55000,
     "device.telemetry.captureScreen": 15000
   };
 

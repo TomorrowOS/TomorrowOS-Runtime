@@ -45,6 +45,7 @@
     launchGeneration += 1;
     detachRecovery();
     RT.resetGuestHandlers();
+    RT.endAppSession();
     const appFrame = frame();
     if (appFrame) {
       appFrame.src = "about:blank";
@@ -182,7 +183,7 @@
       if (generation !== launchGeneration) return;
       setMode("external");
       try { appFrame.focus(); } catch { /* ignore */ }
-      RT.exposeSameOriginApi(appFrame, bridgeContext);
+      RT.noteAppLoaded(bridgeContext);
     }
 
     async function failActivation() {
@@ -225,7 +226,8 @@
       detail || ""
     );
     RT.resetGuestHandlers();
-    appFrame.src = record.entryUrl;
+    // The launch's nonce rides in the page address; the SDK presents it to get a private channel.
+    appFrame.src = RT.beginAppSession(record.entryUrl);
   }
 
   function fallbackBuiltin(detail) {

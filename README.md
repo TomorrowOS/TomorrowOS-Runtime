@@ -339,7 +339,7 @@ Example:
 ```javascript
 window.TOMORROWOS_RUNTIME_CONFIG = {
   shellName: "TomorrowOS",
-  runtimeVersion: "1.2.2",
+  runtimeVersion: "1.2.4",
   appSourceUrl: "https://example.com/hello-signage/manifest.json",
   lockAppSource: false
 };
@@ -353,7 +353,6 @@ window.TOMORROWOS_RUNTIME_CONFIG = {
 | `runtimeVersion` | Shell version identifier |
 | `appSourceUrl` | Optional predefined application source |
 | `lockAppSource` | Restricts changing the predefined source through the normal setup interface |
-
 When no application source is configured, the Shell can present an application selection/setup experience.
 
 Where a compatible built-in application is available, the operator may also select it.
@@ -379,8 +378,16 @@ window.TomorrowOS
 The inspected SDK currently identifies itself as:
 
 ```javascript
-TomorrowOS.apiVersion // "6"
+TomorrowOS.apiVersion // "7"
 ```
+
+### Connecting to the Shell
+
+The Shell loads the application with a one-time `tomorrowos_nonce` query parameter. The SDK presents that nonce and receives a private `MessageChannel` port; all later messages use the port. The Shell accepts nothing else from the application frame.
+
+- SDK API version 7 and Runtime 1.2.4 or newer must be used together. Applications built with SDK API version 6 or earlier (which used `window.postMessage`) can no longer connect, and an SDK 7 application cannot connect to a Shell older than 1.2.4. The Shell logs a console error when an application has not connected five seconds after loading.
+- Applications with several HTML pages should open them with `TomorrowOS.navigate(url)`. Ordinary `<a href>` links to pages in the application folder also work, because the SDK carries the nonce. A page opened without the nonce (for example through `location.href` or a form submit) is not connected, and its SDK calls fail at once with an explanatory error. Single-page applications and in-page routing need no change.
+- `TomorrowOS.getTransport()` returns `"channel"`, `"pending"`, `"unconnected"`, `"failed"` or `"none"` for diagnostics.
 
 The following API methods are present in the developer-preview source.
 
@@ -785,9 +792,9 @@ These include:
 - Message origin verification
 - Application update and rollback behaviour
 
-The current implementation uses `postMessage` communication between the application and Shell.
+Application-to-Shell communication uses a private `MessageChannel` that is handed over only to the page that presents the launch's one-time nonce (see [Connecting to the Shell](#connecting-to-the-shell)). When the application is served from an `http(s)` address, the Shell and SDK additionally check and name the peer's origin. Applications served from `file://` have no origin that can be named, so the nonce and the private channel are what protect the connection there.
 
-Some message paths use wildcard target origins. The application trust boundary, message validation, package authenticity and exposed host operations require further review before running untrusted third-party applications.
+The earlier `window.postMessage` request path, which trusted the application frame as a whole, has been removed. The nonce is visible to the application's own code, so it does not protect against a malicious application itself. The application trust boundary, per-application permissions, package authenticity and exposed host operations still require further review before running untrusted third-party applications.
 
 The current manifest contract does not require a package checksum or digital signature.
 
